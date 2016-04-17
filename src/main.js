@@ -28,7 +28,7 @@ function init() {
 		points = hilbert3D( new THREE.Vector3( 0,0,0 ), 100.0, 3, 0, 1, 2, 3, 4, 5, 6, 7 ),
 		colors = [], colors2 = [], colors3 = [];
 
-	for (let i = 0;i<1000;i++) {
+	for (let i = 0;i<5000;i++) {
 		let line = new Line(scene, points);
 		dots.push(line);
 	}
