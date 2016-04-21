@@ -22,17 +22,7 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.autoClearColor = false;
 	container.appendChild( renderer.domElement );
-	var geometry = new THREE.Geometry(),
-		geometry2 = new THREE.Geometry(),
-		geometry3 = new THREE.Geometry(),
-		points = hilbert3D( new THREE.Vector3( 0,0,0 ), 100.0, 3, 0, 1, 2, 3, 4, 5, 6, 7 ),
-		colors = [], colors2 = [], colors3 = [];
 
-	for (let i = 0;i<5000;i++) {
-		let line = new Line(scene, points);
-		dots.push(line);
-	}
-	
 	// stats = new Stats();
 	// stats.domElement.style.position = 'absolute';
 	// stats.domElement.style.top = '0px';
@@ -40,6 +30,7 @@ function init() {
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 	document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	//
 	window.addEventListener( 'resize', onWindowResize, false );
 }
@@ -52,8 +43,8 @@ function onWindowResize() {
 }
 //
 function onDocumentMouseMove( event ) {
-	mouseX = event.clientX - windowHalfX;
-	mouseY = event.clientY - windowHalfY;
+	mouseX = ( event.clientX / window.innerWidth ) ;
+	mouseY =  ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 function onDocumentTouchStart( event ) {
 	if ( event.touches.length > 1 ) {
@@ -70,6 +61,14 @@ function onDocumentTouchMove( event ) {
 	}
 }
 //
+function onDocumentMouseDown( event ) {
+
+	let line = new Line(scene, event.clientX, event.clientY);
+	dots.push(line);
+
+	
+
+}
 function animate() {
 	requestAnimationFrame( animate );
 	for (let d in dots) {
@@ -79,9 +78,11 @@ function animate() {
 	render();
 }
 function render() {
-	// camera.position.x += ( mouseX - camera.position.x ) * .05;
-	// camera.position.y += ( - mouseY + 200 - camera.position.y ) * .05;
-	camera.lookAt( scene.position );
+	var r = Date.now() * 0.0005;
+	camera.position.x += ( mouseX - camera.position.x ) * .08;
+	camera.position.y += ( - mouseY + 200 - camera.position.y ) * .05;
+	// camera.fov = 35 + 30 * Math.sin( 0.5 * r );
+	camera.lookAt( mouseX, mouseY, 0 );
 
 	renderer.render( scene, camera );
 }

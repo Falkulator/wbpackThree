@@ -1,13 +1,13 @@
 var noise = require('../lib/noise')
 class Line {
-	constructor(scene, points) {
-        this.points = points;
+	constructor(scene, x, y) {
+
         var colors = [ 0x000000, 0xff0080, 0x8000ff, 0xffffff ];
         var geometry = new THREE.Geometry();
         var vertex = new THREE.Vector3();
-        vertex.x = Math.random() * 4000 - 2000;
-        vertex.y = Math.random() * 4000 - 2000;
-        vertex.z = Math.random() * 4000 - 2000;
+        vertex.x = x;
+        vertex.y = y;
+        vertex.z = 100;
         this.tNoise = new noise();
         this.pNoise = new noise();
         this.tNoise.seed(Math.random());
@@ -24,7 +24,7 @@ class Line {
         this.tn = this.tNoise.perlin2(10,5);
         this.pn = this.pNoise.perlin2(10,5);
 
-        this.r = new THREE.Vector3( Math.random(), Math.random(), Math.random() );
+        this.r = new THREE.Vector3( Math.random() -0.5, Math.random()-0.5, Math.random()-0.5 );
         this.phi = new THREE.Vector3( 0, Math.random(), Math.random() );
         this.theta = new THREE.Vector3( Math.random(), Math.random(), 0 );
         this.vector = new THREE.Vector3(0,0,0);
@@ -47,9 +47,10 @@ class Line {
 
         this.nx += stepSize
         this.ny += stepSize
-        this.mesh.position.y += this.vector.y 
-        this.mesh.position.x += this.vector.x
-        this.mesh.position.z += this.vector.z
+        this.mesh.position.y += this.r.y 
+        this.mesh.position.x += this.r.x
+        this.mesh.position.z += this.r.z
+        console.log('x', this.mesh.position.x, ' ', 'rx ', this.r.x)
 
         this.vector.applyAxisAngle(this.yAxis, Math.PI)
         // this.mesh.rotation.z = this.ny
